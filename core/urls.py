@@ -113,6 +113,7 @@ urlpatterns = [
     path('api/v1/ready/', views.ready_check, name='ready-check'),
     path('api/v1/live/', views.live_check, name='live-check'),
     path('api/v1/swagger-test/', views.swagger_test, name='swagger-test'),
+    path('api/v1/cors-test/', views.cors_test, name='cors-test'),
     path('health/', views.health_check, name='health-check-short'),  # For load balancers
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),

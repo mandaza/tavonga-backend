@@ -112,4 +112,36 @@ def swagger_test(request):
         "secure": request.is_secure(),
         "timestamp": int(time.time()),
         "method": request.method
-    }) 
+    })
+
+
+def cors_test(request):
+    """
+    CORS test endpoint to help diagnose cross-origin issues.
+    Returns detailed request information including headers.
+    """
+    response_data = {
+        "message": "✅ CORS test successful!",
+        "method": request.method,
+        "origin": request.META.get('HTTP_ORIGIN', 'No origin header'),
+        "host": request.META.get('HTTP_HOST', 'unknown'),
+        "user_agent": request.META.get('HTTP_USER_AGENT', 'unknown'),
+        "secure": request.is_secure(),
+        "protocol": request.META.get('HTTP_X_FORWARDED_PROTO', 'unknown'),
+        "timestamp": int(time.time()),
+        "cors_headers": {
+            "Access-Control-Allow-Origin": request.META.get('HTTP_ORIGIN', '*'),
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        }
+    }
+    
+    response = JsonResponse(response_data)
+    
+    # Manually set CORS headers for testing
+    origin = request.META.get('HTTP_ORIGIN')
+    if origin:
+        response['Access-Control-Allow-Origin'] = origin
+        response['Access-Control-Allow-Credentials'] = 'true'
+    
+    return response 

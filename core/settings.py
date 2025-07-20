@@ -156,8 +156,50 @@ elif STORAGE_BACKEND == 'cloudinary':
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only allow all origins in debug mode
+
+# Always define allowed origins for production
+CORS_ALLOWED_ORIGINS = [
+    'https://tavonga-app-4e7034e4fd41.herokuapp.com',
+    'https://*.herokuapp.com',
+    'http://localhost:3000',  # For local development
+    'http://127.0.0.1:3000',  # For local development
+]
+
+# Additional CORS settings for proper frontend integration
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Override with environment variable if provided
 if not DEBUG:
-    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='https://tavonga-app-4e7034e4fd41.herokuapp.com', cast=Csv())
+    env_origins = config('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
+    if env_origins:
+        CORS_ALLOWED_ORIGINS.extend(env_origins)
+
+# CORS debugging (remove in production after testing)
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+    
+# Additional CORS settings to handle preflight requests
+CORS_PREFLIGHT_MAX_AGE = 86400  # 24 hours
 
 # CSRF Configuration - Add trusted origins for DigitalOcean and Heroku
 CSRF_TRUSTED_ORIGINS = [
