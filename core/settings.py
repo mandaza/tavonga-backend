@@ -294,7 +294,28 @@ SWAGGER_SETTINGS = {
         'delete',
         'patch'
     ],
+    'DEFAULT_MODEL_DEPTH': 3,
+    'DEFAULT_MODEL_RENDERING': 'example',
+    'SHOW_REQUEST_HEADERS': True,
+    'DOC_EXPANSION': 'none',
+    'DEEP_LINKING': True,
+    'SHOW_EXTENSIONS': True,
+    'SHOW_COMMON_EXTENSIONS': True,
 }
+
+# drf-yasg specific settings for production
+REDOC_SETTINGS = {
+    'LAZY_RENDERING': False,
+    'HIDE_HOSTNAME': False,
+    'EXPAND_RESPONSES': ['200', '201'],
+}
+
+# Additional settings for production API documentation
+if not DEBUG:
+    # Force HTTPS for API documentation in production
+    USE_X_FORWARDED_HOST = True
+    USE_X_FORWARDED_PORT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Cache Configuration (Redis)
 REDIS_URL = config('REDIS_URL', default=None)

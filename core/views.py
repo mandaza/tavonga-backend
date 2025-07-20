@@ -97,4 +97,19 @@ def live_check(request):
     return JsonResponse({
         "status": "alive",
         "timestamp": int(time.time())
-    }, status=200) 
+    }, status=200)
+
+
+def swagger_test(request):
+    """
+    Simple test endpoint for Swagger UI testing.
+    This endpoint can be used to verify that the API is accessible via HTTPS.
+    """
+    return JsonResponse({
+        "message": "✅ Swagger test successful!",
+        "protocol": request.META.get('HTTP_X_FORWARDED_PROTO', 'unknown'),
+        "host": request.META.get('HTTP_HOST', 'unknown'),
+        "secure": request.is_secure(),
+        "timestamp": int(time.time()),
+        "method": request.method
+    }) 

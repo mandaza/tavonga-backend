@@ -38,6 +38,20 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    url='https://jellyfish-app-ho48c.ondigitalocean.app/',
+    patterns=[
+        path('api/v1/', include('users.urls')),
+        path('api/v1/', include('goals.urls')),
+        path('api/v1/', include('activities.urls')),
+        path('api/v1/', include('behaviors.urls')),
+        path('api/v1/', include('shifts.urls')),
+        path('api/v1/', include('media.urls')),
+        path('api/v1/reports/', include('reports.urls')),
+        path('api/v1/scheduler/', include('scheduler.urls')),
+        path('api/v1/', include('clients.urls')),
+        path('api/v1/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+        path('api/v1/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    ],
 )
 
 def dashboard_stats(request):
@@ -98,8 +112,10 @@ urlpatterns = [
     path('api/v1/health/', views.health_check, name='health-check'),
     path('api/v1/ready/', views.ready_check, name='ready-check'),
     path('api/v1/live/', views.live_check, name='live-check'),
+    path('api/v1/swagger-test/', views.swagger_test, name='swagger-test'),
     path('health/', views.health_check, name='health-check-short'),  # For load balancers
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
