@@ -158,6 +158,12 @@ CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only allow all origins in debug mode
 if not DEBUG:
     CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
 
+# CSRF Configuration - Add trusted origins for DigitalOcean
+CSRF_TRUSTED_ORIGINS = [
+    'https://jellyfish-app-ho48c.ondigitalocean.app',
+    'https://*.ondigitalocean.app',
+]
+
 # Security settings for production
 if not DEBUG:
     SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
