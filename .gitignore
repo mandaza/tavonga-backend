@@ -59,8 +59,11 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Media files (uploads)
-media/
+# Media files (uploads) - but allow the media Django app
+media/uploads/
+media/files/
+!media/*.py
+!media/migrations/
 
 # Static files (will be collected in production)
 staticfiles/
