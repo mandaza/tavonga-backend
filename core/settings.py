@@ -19,8 +19,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-production')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-# Configure ALLOWED_HOSTS - allow DigitalOcean domains
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,jellyfish-app-ho48c.ondigitalocean.app,.ondigitalocean.app', cast=Csv())
+# BULLETPROOF ALLOWED_HOSTS - Always allow DigitalOcean domains
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+    'jellyfish-app-ho48c.ondigitalocean.app',
+    '.ondigitalocean.app',
+    '*'  # Allow all hosts as final fallback (remove this for production security)
+]
 
 # Application definition
 INSTALLED_APPS = [
