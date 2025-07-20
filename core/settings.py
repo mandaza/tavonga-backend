@@ -157,12 +157,14 @@ elif STORAGE_BACKEND == 'cloudinary':
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only allow all origins in debug mode
 if not DEBUG:
-    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
+    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='https://tavonga-app-4e7034e4fd41.herokuapp.com', cast=Csv())
 
-# CSRF Configuration - Add trusted origins for DigitalOcean
+# CSRF Configuration - Add trusted origins for DigitalOcean and Heroku
 CSRF_TRUSTED_ORIGINS = [
     'https://jellyfish-app-ho48c.ondigitalocean.app',
     'https://*.ondigitalocean.app',
+    'https://tavonga-app-4e7034e4fd41.herokuapp.com',
+    'https://*.herokuapp.com',
 ]
 
 # Security settings for production
