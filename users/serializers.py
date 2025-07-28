@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
 
 User = get_user_model()
 
@@ -81,3 +83,45 @@ class AdminUserSerializer(serializers.ModelSerializer):
             'profile_image', 'date_of_birth', 'hire_date', 'is_active_carer',
             'is_admin', 'approved', 'is_carer', 'created_at', 'updated_at'
         ] 
+
+
+class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'] = self.fields.pop('username')
+    
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        
+        if email and password:
+            user = authenticate(
+                request=self.context.get('request'),
+                email=email,
+                password=password
+            )
+            
+            if not user:
+                raise serializers.ValidationError(
+                    'No active account found with the given credentials'
+                )
+            
+            if not user.is_active:
+                raise serializers.ValidationError('Account is disabled')
+                
+            if not user.approved and not user.is_admin:
+                raise serializers.ValidationError('Account is pending approval')
+            
+            refresh = self.get_token(user)
+            data = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
+            
+            return data
+        else:
+            raise serializers.ValidationError(
+                'Must include "email" and "password".'
+            ) 
