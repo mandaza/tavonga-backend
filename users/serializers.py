@@ -86,11 +86,8 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 
 class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = 'email'
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['email'] = self.fields.pop('username')
+    email = serializers.EmailField()
+    password = serializers.CharField()
     
     def validate(self, attrs):
         email = attrs.get('email')
@@ -115,12 +112,11 @@ class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
                 raise serializers.ValidationError('Account is pending approval')
             
             refresh = self.get_token(user)
-            data = {
+            
+            return {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             }
-            
-            return data
         else:
             raise serializers.ValidationError(
                 'Must include "email" and "password".'
